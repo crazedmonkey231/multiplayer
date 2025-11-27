@@ -43,6 +43,15 @@ io.on("connection", (socket) => {
     if (input.down) player.y += speed;
   });
 
+  // Receive more complex state updates from this client
+  socket.on("playerStateUpdate", (state) => {
+    const player = players[socket.id];
+    if (!player) return;
+    // Here you could process more complex state updates
+    // For now, we just log it
+    console.log(`Received state update from ${socket.id}:`, state);
+  });
+
   // Handle disconnect
   socket.on("disconnect", () => {
     console.log("user disconnected:", socket.id);

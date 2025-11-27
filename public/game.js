@@ -36,6 +36,7 @@ let cursors;
 let otherKeys;
 let playerSprites = {}; // { id: phaserSprite }
 
+let syncTimer = 0;
 let myId = null;
 let lastInputState = { up: false, down: false, left: false, right: false };
 
@@ -87,7 +88,10 @@ function create() {
   });
 }
 
-function update() {
+function update(time, delta) {
+  const ms = delta / 1000;
+
+  // Gather input state
   const inputState = {
     up: cursors.up.isDown || otherKeys.W.isDown,
     down: cursors.down.isDown || otherKeys.S.isDown,
@@ -95,10 +99,23 @@ function update() {
     right: cursors.right.isDown || otherKeys.D.isDown,
   };
 
-  // Only emit when input actually changes (reduces spam)
+  // Only emit when input actually changes
   if (!sameInput(inputState, lastInputState)) {
     socket.emit("playerInput", inputState);
     lastInputState = inputState;
+  }
+
+  // Periodic sync
+  syncTimer += ms;
+  if (syncTimer >= 0.1) {
+    syncTimer = 0;
+    playerState = {
+      inputState: inputState
+    }
+    socket.emit("playerStateUpdate", playerState);
+    lastInputState = inputState;
+  } else {
+    return;
   }
 }
 
