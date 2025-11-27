@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Phaser + Socket.IO Multiplayer</title>
+  <style>
+    /* html, body, #app { width: 960px; height: 720px; margin: 0; background: #0e1116; } */
+    html, body, #app {  width: 100%; height: 100%; margin: 0; background: #0e1116; }
+    #app { position: relative; overflow: hidden; }
+    /* Three's canvas sits behind */
+    canvas.three {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: block;
+    }
+    /* Phaser will append its own canvas; we nudge it above */
+    #phaser-parent canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: auto; /* capture input for UI */
+    }
+    .hint {
+      position: absolute; left: 12px; bottom: 12px;
+      color: #cfd3dc; font: 12px/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      opacity: .8; user-select: none; pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Phaser 3 -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+  <!-- Socket.IO client -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Your game code -->
+  <script src="game.js"></script>
+  <div id="app">
+    <!-- Three's canvas will be injected here -->
+    <!-- Phaser will mount into #phaser-parent -->
+    <div id="phaser-parent"></div>
+  </div>
+</body>
+</html>
